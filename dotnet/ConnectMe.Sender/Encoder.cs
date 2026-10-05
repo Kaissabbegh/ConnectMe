@@ -45,9 +45,13 @@ public sealed class Encoder : IDisposable
     {
         var filter = string.IsNullOrEmpty(p.Filter) ? "" : $"-vf {p.Filter} ";
         int kbps = bitrateMbps * 1000;
-        return "-hide_banner -loglevel warning -nostdin " +
+        return "-hide_banner -loglevel error -nostdin " +
                $"-f lavfi -i ddagrab=output_idx={outputIdx}:framerate={fps}:draw_mouse=1 " +
                filter +
+               // passthrough: after a capture hiccup, don't "catch up" by emitting a burst of duplicate
+               // frames (seen as fps swinging 2 → 70 and a "More than 1000 frames duplicated" warning).
+               // ddagrab already repeats frames itself while the screen is static.
+               "-fps_mode passthrough " +
                $"-c:v {p.Codec} {p.Options} -b:v {kbps}k -maxrate {kbps}k -bufsize {kbps / 2}k " +
                $"-g {fps} -bf 0 -an -color_range tv -colorspace bt709 -color_primaries bt709 -color_trc bt709 " +
                "-bsf:v h264_metadata=aud=insert " +
