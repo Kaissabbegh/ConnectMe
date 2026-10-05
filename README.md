@@ -40,7 +40,7 @@ It builds the app on the iMac (Apple's Command Line Tools are installed first if
 ```powershell
 irm https://raw.githubusercontent.com/Kaissabbegh/ConnectMe/main/install/laptop.ps1 | iex
 ```
-It installs ConnectMe and FFmpeg into `%LOCALAPPDATA%\ConnectMe`, with Desktop and Start menu shortcuts.
+It installs ConnectMe and FFmpeg (gyan.dev's build from its GitHub mirror, ~33 MB) into `%LOCALAPPDATA%\ConnectMe`, with Desktop and Start menu shortcuts.
 - For an **extended screen**, also install the [Virtual Display Driver](https://github.com/VirtualDrivers/Virtual-Display-Driver/releases) and set the new screen to **2560 × 1440**.
 
 Each iMac shows a full-screen page with its name, IP address and a **4-digit pairing code**.
