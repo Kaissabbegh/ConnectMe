@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- iMac receiver for Windows (Boot Camp) and Linux (e.g. Kali). Video is shown by mpv. -->
+  <PropertyGroup>
+    <!-- WinExe hides the console on Windows; on Linux it behaves like a normal executable. -->
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ConnectMe</RootNamespace>
+    <AssemblyName>ConnectMeDisplay</AssemblyName>
+    <Version>0.1.0</Version>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\ConnectMe.Sender\Protocol.cs" Link="Protocol.cs" />
+  </ItemGroup>
+
+</Project>

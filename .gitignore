@@ -1,0 +1,10 @@
+bin/
+obj/
+*.user
+.vs/
+.build/
+dist/
+mac/ConnectMeDisplay/build/
+*.h264
+ffmpeg.exe
+mpv.exe

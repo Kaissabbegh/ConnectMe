@@ -1,0 +1,41 @@
+name: Release
+
+# Push a tag like v0.1.1 to build all apps and publish them as a GitHub release.
+# The install scripts in install/ always download from the latest release.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build
+        shell: pwsh
+        run: |
+          $c = @('-c', 'Release', '--self-contained', '-p:PublishSingleFile=true',
+                 '-p:IncludeNativeLibrariesForSelfExtract=true', '-p:DebugType=none',
+                 '-p:EnableCompressionInSingleFile=true')
+          dotnet publish dotnet/ConnectMe.Sender  -r win-x64   @c -o out/laptop
+          dotnet publish dotnet/ConnectMe.Display -r win-x64   @c -o out/imac-windows
+          dotnet publish dotnet/ConnectMe.Display -r linux-x64 @c -o out/imac-linux
+          New-Item -ItemType Directory assets | Out-Null
+          Copy-Item out/laptop/ConnectMe.exe              assets/ConnectMe.exe
+          Copy-Item out/imac-windows/ConnectMeDisplay.exe assets/ConnectMeDisplay-win-x64.exe
+          Copy-Item out/imac-linux/ConnectMeDisplay       assets/ConnectMeDisplay-linux-x64
+
+      - name: Publish release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" assets/* --title "ConnectMe ${{ github.ref_name }}" --generate-notes
